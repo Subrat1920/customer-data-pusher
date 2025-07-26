@@ -1,0 +1,12 @@
+pandas
+numpy
+scikit-learn
+python-dotenv
+ipykernel
+faker
+matplotlib
+seaborn
+tensorflow
+keras
+sqlalchemy 
+psycopg2

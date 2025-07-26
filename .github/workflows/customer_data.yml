@@ -1,0 +1,32 @@
+name: Append Customer Metadata
+
+on:
+  schedule:
+    - cron: '10 1 * * *'  # Daily at 6:40 AM IST
+  workflow_dispatch:
+
+jobs:
+  customer-metadata-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run metadata append script
+        env:
+          NEON_DATABASE_USERNAME: ${{ secrets.NEON_DATABASE_USERNAME }}
+          NEON_DATABASE_PASSWORD: ${{ secrets.NEON_DATABASE_PASSWORD }}
+          NEON_DATABASE_HOST: ${{ secrets.NEON_DATABASE_HOST }}
+          NEON_DATABASE_PORT: ${{ secrets.NEON_DATABASE_PORT }}
+          NEON_DATABASE_DATABASE_NAME: ${{ secrets.NEON_DATABASE_DATABASE_NAME }}
+        run: python customer_data.py

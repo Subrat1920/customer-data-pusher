@@ -6,16 +6,18 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
-# Load .env variables
 load_dotenv()
 
-# Constants
 revenue_map = {"Basic": 1000, "Pro": 3000, "Enterprise": 10000}
 plans = ["Basic", "Pro", "Enterprise"]
 
+def get_db_url():
+    return f"postgresql://{os.getenv('NEON_DATABASE_USERNAME')}:{os.getenv('NEON_DATABASE_PASSWORD')}" \
+           f"@{os.getenv('NEON_DATABASE_HOST')}:{os.getenv('NEON_DATABASE_PORT')}/" \
+           f"{os.getenv('NEON_DATABASE_DATABASE_NAME')}?sslmode=require"
+
 def append_daily_revenue_rows():
     today = datetime.today().date()
-
     rows_to_generate = random.randint(3, 5)
     new_rows = []
 
@@ -37,12 +39,9 @@ def append_daily_revenue_rows():
         "new_signups", "daily_revenue", "avg_usage_score"
     ])
 
-    # Connect to DB
-    db_url = os.getenv("POSTGRES_URL")
-    engine = create_engine(db_url)
-
+    engine = create_engine(get_db_url())
     df.to_sql('daily_revenue', con=engine, if_exists='append', index=False)
-    print(f"✅ {len(df)} daily revenue rows inserted for {today}.")
+    print(f"✅ {len(df)} revenue rows inserted for {today}.")
 
 if __name__ == "__main__":
     append_daily_revenue_rows()

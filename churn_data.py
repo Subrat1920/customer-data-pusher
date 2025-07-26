@@ -7,21 +7,21 @@ from faker import Faker
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
-
-# Faker and Random Seed
 fake = Faker()
 np.random.seed(42)
 random.seed(42)
 
-# Constants
 NUM_CUSTOMERS = 5000
 PLANS = ["Basic", "Pro", "Enterprise"]
 
+def get_db_url():
+    return f"postgresql://{os.getenv('NEON_DATABASE_USERNAME')}:{os.getenv('NEON_DATABASE_PASSWORD')}" \
+           f"@{os.getenv('NEON_DATABASE_HOST')}:{os.getenv('NEON_DATABASE_PORT')}/" \
+           f"{os.getenv('NEON_DATABASE_DATABASE_NAME')}?sslmode=require"
+
 def generate_and_append_data():
     today = datetime.today().date()
-
     rows_to_generate = random.randint(3, 5)
     new_rows = []
 
@@ -56,7 +56,6 @@ def generate_and_append_data():
             last_engaged_day, avg_session_duration, churn
         ])
 
-    # DataFrame creation
     df = pd.DataFrame(new_rows, columns=[
         "customer_id", "date", "usage_score", "login_frequency", "active_days",
         "feature_adoption_score", "support_tickets", "payment_issue",
@@ -64,12 +63,9 @@ def generate_and_append_data():
         "last_engaged_day", "avg_session_duration", "churn"
     ])
 
-    # Get DB connection string from .env
-    db_url = os.getenv("POSTGRES_URL")  # Example: postgresql://user:pass@host/db?sslmode=require
-    engine = create_engine(db_url)
-
+    engine = create_engine(get_db_url())
     df.to_sql('churn_data', con=engine, if_exists='append', index=False)
-    print(f"✅ {len(df)} rows inserted for {today}.")
+    print(f"✅ {len(df)} churn rows inserted for {today}.")
 
 if __name__ == "__main__":
     generate_and_append_data()

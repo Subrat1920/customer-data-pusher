@@ -7,16 +7,11 @@ from faker import Faker
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
-
-# Initialize Faker and random seeds
 fake = Faker()
 np.random.seed(42)
 random.seed(42)
 
-# Constants
-NUM_CUSTOMERS = 5000
 industries = ["Tech", "Finance", "Retail", "Healthcare", "Education"]
 regions = ["North America", "Europe", "Asia", "LATAM"]
 sizes = ["Small", "Mid", "Large"]
@@ -32,6 +27,13 @@ review_templates = [
     "We rarely use all the features, considering alternatives.",
     "Reliable and user-friendly. Works well for our business size."
 ]
+
+NUM_CUSTOMERS = 5000
+
+def get_db_url():
+    return f"postgresql://{os.getenv('NEON_DATABASE_USERNAME')}:{os.getenv('NEON_DATABASE_PASSWORD')}" \
+           f"@{os.getenv('NEON_DATABASE_HOST')}:{os.getenv('NEON_DATABASE_PORT')}/" \
+           f"{os.getenv('NEON_DATABASE_DATABASE_NAME')}?sslmode=require"
 
 def append_metadata_rows():
     today = datetime.today().date()
@@ -58,11 +60,7 @@ def append_metadata_rows():
         "company_size", "join_date", "review_text"
     ])
 
-    # Get DB connection string from .env
-    db_url = os.getenv("POSTGRES_URL")
-    engine = create_engine(db_url)
-
-    # Append data
+    engine = create_engine(get_db_url())
     df.to_sql('customer_data', con=engine, if_exists='append', index=False)
     print(f"✅ {len(df)} metadata rows inserted.")
 

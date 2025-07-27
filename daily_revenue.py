@@ -14,7 +14,7 @@ plans = ["Basic", "Pro", "Enterprise"]
 
 
 def get_db_url():
-    return os.getenv("CONNECTION_URL")
+    return os.getenv(f"CONNECTION_URL")
 
 def append_daily_revenue_rows():
     today = datetime.today().date()

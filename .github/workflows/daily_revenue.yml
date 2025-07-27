@@ -2,8 +2,8 @@ name: Append Daily Revenue Data
 
 on:
   schedule:
-    - cron: '0 2 * * *'
-  # Daily at 6:45 AM IST
+    - cron: '0 3 * * *'  # 3:00 AM UTC = 8:30 AM IST
+
   workflow_dispatch:
 
 jobs:

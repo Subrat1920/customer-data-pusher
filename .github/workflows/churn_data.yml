@@ -2,7 +2,8 @@ name: Append Daily Churn Data
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # Daily at 7:30 AM IST (1:05 AM UTC)
+    - cron: '0 3 * * *'  # 3:00 AM UTC = 8:30 AM IST
+
   workflow_dispatch:
 
 jobs:

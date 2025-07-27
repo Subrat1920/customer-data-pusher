@@ -1,0 +1,68 @@
+select * from churn_data;
+select * from customer_data;
+
+-- to get all the columns present in churn data
+SELECT column_name 
+FROM information_schema.columns 
+WHERE table_name = 'churn_data'
+ORDER BY ordinal_position;
+
+-- to get all the columns present in customer data
+select column_name
+from information_schema.columns
+where table_name = 'customer_data'
+order by ordinal_position;
+
+-- SUB-QUERIES USING IN CLAUSE
+--- 1. Find all customers from the 'Technology' industry who have churned
+select customer_id, company
+from customer_data
+where industry = 'Technology'
+and customer_id in (select customer_id
+					from churn_data cd 
+					where churn = 1
+)
+
+
+--- List companies with above-average usage scores
+select company
+from customer_data 
+where customer_id IN (
+						select customer_id from churn_data 
+						where usage_score > (
+								select avg(usage_score) from churn_data
+						)
+);
+
+-- 3. Find customers who logged in frequently but still churned
+select company
+from customer_data
+where customer_id in (
+					select customer_id 
+					from churn_data
+					where churn = 1
+					and login_frequency > (
+									select avg(login_frequency) 
+									from churn_data 
+					)
+);
+
+-- 4. Identify companies that downgraded their plan but didn't churn
+select customer_id, company, company_email
+from customer_data
+where customer_id in (
+					select customer_id 
+					from churn_data
+					where downgraded = 1 
+					and churn = 0
+);
+
+-- 5. Find customers with support tickets but high feature adoption
+select customer_id, company
+from customer_data 
+where customer_id in (
+						select customer_id
+						from churn_data 
+						where feature_adoption_score > (select avg(feature_adoption_score) from churn_data)
+						and support_tickets > (select avg(support_tickets) from churn_data)
+)

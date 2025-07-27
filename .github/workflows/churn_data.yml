@@ -30,4 +30,5 @@ jobs:
           NEON_DATABASE_HOST: ${{ secrets.NEON_DATABASE_HOST }}
           NEON_DATABASE_PORT: ${{ secrets.NEON_DATABASE_PORT }}
           NEON_DATABASE_DATABASE_NAME: ${{ secrets.NEON_DATABASE_DATABASE_NAME }}
+          CONNECTION_URL: ${{ secrets.CONNECTION_URL }}
         run: python churn_data.py

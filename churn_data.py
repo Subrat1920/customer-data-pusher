@@ -15,10 +15,10 @@ random.seed(42)
 NUM_CUSTOMERS = 5000
 PLANS = ["Basic", "Pro", "Enterprise"]
 
+
+
 def get_db_url():
-    return f"postgresql://{os.getenv('NEON_DATABASE_USERNAME')}:{os.getenv('NEON_DATABASE_PASSWORD')}" \
-           f"@{os.getenv('NEON_DATABASE_HOST')}:{os.getenv('NEON_DATABASE_PORT')}/" \
-           f"{os.getenv('NEON_DATABASE_DATABASE_NAME')}?sslmode=require"
+    return os.getenv("CONNECTION_URL")
 
 def generate_and_append_data():
     today = datetime.today().date()

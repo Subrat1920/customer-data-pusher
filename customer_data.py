@@ -30,10 +30,10 @@ review_templates = [
 
 NUM_CUSTOMERS = 5000
 
+
+
 def get_db_url():
-    return f"postgresql://{os.getenv('NEON_DATABASE_USERNAME')}:{os.getenv('NEON_DATABASE_PASSWORD')}" \
-           f"@{os.getenv('NEON_DATABASE_HOST')}:{os.getenv('NEON_DATABASE_PORT')}/" \
-           f"{os.getenv('NEON_DATABASE_DATABASE_NAME')}?sslmode=require"
+    return os.getenv("CONNECTION_URL")
 
 def append_metadata_rows():
     today = datetime.today().date()

@@ -11,10 +11,10 @@ load_dotenv()
 revenue_map = {"Basic": 1000, "Pro": 3000, "Enterprise": 10000}
 plans = ["Basic", "Pro", "Enterprise"]
 
+
+
 def get_db_url():
-    return f"postgresql://{os.getenv('NEON_DATABASE_USERNAME')}:{os.getenv('NEON_DATABASE_PASSWORD')}" \
-           f"@{os.getenv('NEON_DATABASE_HOST')}:{os.getenv('NEON_DATABASE_PORT')}/" \
-           f"{os.getenv('NEON_DATABASE_DATABASE_NAME')}?sslmode=require"
+    return os.getenv("CONNECTION_URL")
 
 def append_daily_revenue_rows():
     today = datetime.today().date()

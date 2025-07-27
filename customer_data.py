@@ -33,7 +33,7 @@ NUM_CUSTOMERS = 5000
 
 
 def get_db_url():
-    return os.getenv("CONNECTION_URL")
+    return os.getenv(f"CONNECTION_URL")
 
 def append_metadata_rows():
     today = datetime.today().date()

@@ -2,7 +2,7 @@ name: Append Customer Metadata
 
 on:
   schedule:
-    - cron: '30 12 * * *'  # Runs every day at 6:00 PM IST
+    - cron: '30 17 * * *'  # Runs every day at 11:00 PM IST
 
   workflow_dispatch:
 

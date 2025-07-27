@@ -18,7 +18,7 @@ PLANS = ["Basic", "Pro", "Enterprise"]
 
 
 def get_db_url():
-    return os.getenv(f"CONNECTION_URL")
+    return os.getenv("CONNECTION_URL")
 
 def generate_and_append_data():
     today = datetime.today().date()

@@ -5,15 +5,24 @@ __pycache__/
 
 # C extensions
 *.so
-
+data_generator
+Notebook
+churn_dataset.csv
 # Distribution / packaging
 .Python
 build/
+data_generator
+data_generator/
+data_generator/
+test.py/
+
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
+nvenv/
+nvenv
 lib/
 lib64/
 parts/

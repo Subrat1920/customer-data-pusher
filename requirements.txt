@@ -4,3 +4,10 @@ python-dotenv
 faker
 sqlalchemy 
 psycopg2
+ipykernel
+matplotlib
+seaborn
+scikit-learn
+shap
+xgboost
+catboost

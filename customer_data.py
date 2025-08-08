@@ -1,68 +1,82 @@
 import os
 import random
-import numpy as np
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, date
 from faker import Faker
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 fake = Faker()
-np.random.seed(42)
 random.seed(42)
 
-industries = ["Tech", "Finance", "Retail", "Healthcare", "Education"]
-regions = ["North America", "Europe", "Asia", "LATAM"]
-sizes = ["Small", "Mid", "Large"]
-review_templates = [
-    "The platform has helped our team stay organized and productive.",
-    "We're facing some bugs and missing features we expected.",
-    "Great interface, but support can be slow.",
-    "We love the reporting tools and automation options!",
-    "It's overpriced for the feature set we use.",
-    "Easy onboarding and helpful documentation.",
-    "Product is not intuitive for non-technical users.",
-    "Outstanding customer service and integrations.",
-    "We rarely use all the features, considering alternatives.",
-    "Reliable and user-friendly. Works well for our business size."
+ALLOWED_EMAILS = [
+    "subratmishra1sep@gmail.com", "2subratmishra1sep@gmail.com",
+    "subuking001@gmail.com", "22mca053.subratmishra@giet.edu",
+    "22mca053.subratmishra@gmail.com", "subu2459@gmail.com",
+    "prjctreview@gmail.com", "sumu12321@gmail.com",
+    "photosubratmishra@gmail.com"
 ]
 
-NUM_CUSTOMERS = 5000
-
-
-
 def get_db_url():
-    return os.getenv("CONNECTION_URL")
+    url = os.getenv("CONNECTION_URL")
+    if not url:
+        raise ValueError("CONNECTION_URL not set in .env")
+    return url
 
-def append_metadata_rows():
-    today = datetime.today().date()
-    rows_to_generate = random.randint(3, 5)
-    records = []
-
-    for _ in range(rows_to_generate):
-        customer_id = random.randint(1, NUM_CUSTOMERS)
-        company = fake.company()
-        email = fake.email()
-        industry = random.choice(industries)
-        region = random.choice(regions)
-        company_size = random.choices(sizes, weights=[0.6, 0.3, 0.1])[0]
-        join_date = fake.date_between(start_date='-2y', end_date='today')
-        review = random.choice(review_templates)
-
-        records.append([
-            customer_id, email, company, industry, region,
-            company_size, join_date, review
-        ])
-
-    df = pd.DataFrame(records, columns=[
-        "customer_id", "company_email", "company", "industry", "region",
-        "company_size", "join_date", "review_text"
+def generate_customer_row():
+    ts = datetime.now().strftime("%Y%m%d%H%M%S%f")
+    customer_id = f"CUST{ts}{random.randint(100,999)}"
+    full_name = fake.name()
+    email = random.choice(ALLOWED_EMAILS)
+    phone_number = fake.phone_number()
+    city = fake.city()
+    state = fake.state()
+    country = "India"
+    signup_date = fake.date_between(start_date='-2y', end_date='today')
+    review_text = random.choice([
+        "The streaming quality is excellent.",
+        "Too many ads on the basic plan.",
+        "Loving the variety of genres available.",
+        "Customer support resolved my issue quickly.",
+        "The app is easy to use.",
+        "The streaming quality is excellent.",
+        "Too many ads on the basic plan.",
+        "Loving the variety of genres available.",
+        "Customer support resolved my issue quickly.",
+        "The app is easy to use.",
+        "The streaming quality is excellent.",
+        "Too many ads on the basic plan.",
+        "Loving the variety of genres available.",
+        "Customer support resolved my issue quickly.",
+        "The app is easy to use.",
+        "The platform has helped our team stay organized and productive.",
+        "We're facing some bugs and missing features we expected.",
+        "Great interface, but support can be slow.",
+        "We love the reporting tools and automation options!",
+        "It's overpriced for the feature set we use.",
+        "Easy onboarding and helpful documentation.",
+        "Product is not intuitive for non-technical users.",
+        "Outstanding customer service and integrations.",
+        "We rarely use all the features, considering alternatives.",
+        "Reliable and user-friendly. Works well for our business size."
     ])
+    pushed_date = date.today()
+    return [
+        customer_id, full_name, email, phone_number,
+        city, state, country, signup_date, review_text, pushed_date
+    ]
 
+def insert_single_customer():
+    record = [generate_customer_row()]
+    df = pd.DataFrame(record, columns=[
+        "customer_id", "full_name", "email", "phone_number",
+        "city", "state", "country", "signup_date", "review_text", "pushed_date"
+    ])
     engine = create_engine(get_db_url())
     df.to_sql('customer_data', con=engine, if_exists='append', index=False)
-    print(f"✅ {len(df)} metadata rows inserted.")
+    print(f"✅ 1 row inserted into customer_data.")
 
 if __name__ == "__main__":
-    append_metadata_rows()
+    insert_single_customer()
